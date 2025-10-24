@@ -17,10 +17,6 @@ const serverConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     AuthStore,
     ToDoStore,
-    provideAppInitializer(() => {
-      const tokens = inject(TokenService);
-      tokens.rehydrateFromBrowser();
-    }),
   ]
 };
 

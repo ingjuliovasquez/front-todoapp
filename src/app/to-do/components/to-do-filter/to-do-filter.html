@@ -1,33 +1,43 @@
- <section class="grid grid-cols-3 gap-6 mt-3 mb-3 text-xl"
+ <section class="grid grid-cols-3 gap-6 mt-3 mb-3 lg:text-xl"
   >
     <button
-      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-row gap-6 items-center"
-      [class.btn-primary]="filter() === 'all'"
+      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-col lg:flex-row gap-2 lg:gap-6 items-center"
+      [class.bg-blue-200]="filter() === 'all'"
       (click)="setFilter('all')"
     >
       <div class="rounded-full p-2 bg-blue-300">
         <i-lucide [img]="ListTodo" class="text-white " size="20"></i-lucide>
       </div>
-      Todo
+      <div class="hidden sm:block"  [class.font-semibold]="filter() === 'all'"
+      [class.text-blue-500]="filter() === 'all'">
+        Lista
+      </div>
     </button>
     <button
-      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-row gap-6 items-center"
-      [class.btn-primary]="filter() === 'active'"
+      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-col lg:flex-row gap-2 lg:gap-6 items-center"
+      [class.bg-blue-200]="filter() === 'active'"
       (click)="setFilter('active')"
     >
       <div class="rounded-full p-2 bg-blue-300">
         <i-lucide [img]="LayoutList" class="text-white " size="20"></i-lucide>
       </div>
-      Sin completar
+       <div class="hidden sm:block"  [class.font-semibold]="filter() === 'active'"
+      [class.text-blue-500]="filter() === 'active'">
+        Sin completar
+      </div>
     </button>
     <button
-      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-row gap-6 items-center"
-      [class.btn-primary]="filter() === 'finished'"
+      class="text-zinc-600 bg-blue-100 rounded-2xl p-4 w-full col-span-1 flex flex-col lg:flex-row gap-2 lg:gap-6 items-center"
+      [class.bg-blue-200]="filter() === 'finished'"
+      [class.text-white]="filter() === 'finished'"
       (click)="setFilter('finished')"
     >
       <div class="rounded-full p-2 bg-blue-300">
         <i-lucide [img]="ListChecks" class="text-white " size="20"></i-lucide>
       </div>
-      Completado
+       <div class="hidden sm:block" [class.font-semibold]="filter() === 'finished'"
+      [class.text-blue-500]="filter() === 'finished'">
+        Completadas
+      </div>
     </button>
   </section>

@@ -1,3 +1,10 @@
+# 🧪 Prueba Técnica — Aplicación Node.js
+
+## 📦 Versión de Node.js
+**v20.0.0**
+
+---
+
 #  To-Do App — Frontend (Angular 20 + Tailwind + NGRX Signals)
 
 ---
@@ -18,7 +25,7 @@
 ### Clonar el repositorio
 
 ```bash
-git clone https://github.com/
+git clone https://github.com/ingjuliovasquez/front-todoapp.git
 cd front-todoapp
 ```
 
@@ -29,20 +36,21 @@ npm install
 ```
 
 ### Configurar variables de entorno
-El proyecto utiliza una carpeta para environments para definir las variables necesarias.
-Primero, copia el archivo de ejemplo:
+El proyecto utiliza una carpeta para los environments en los que se definen las variables necesarias.
+
+Agrega el archivo environment.ts y environment.development.ts, copia el archivo de ejemplo:
 
 ```bash
 .environment-example.ts
 ```
 
-Agrega o edita el archivo environment.ts y environment.development.ts, ahí se coloca los valores reales:
+Y coloca el valor real de la apiUrl
 
 ```bash
-API_URL=http://localhost:3000
+http://localhost:3000
 ```
 
-O el que apunta al backend
+O la ruta que apunta al backend
 
 ---
 
@@ -50,13 +58,13 @@ O el que apunta al backend
 
 | Comando         | Descripción                                                                          |
 | --------------- | ------------------------------------------------------------------------------------ |
-| `npm start`     | Genera el archivo `environment.ts` y levanta el servidor de desarrollo (`ng serve`). |
+| `npm start`     | Levanta el servidor de desarrollo (`ng serve`). |
 | `npm run build` | Genera el archivo de entorno y compila el proyecto para producción.                  |
 
 Una vez iniciado `npm start`, abre el navegador en:
 
 ```bash
- http://localhost:4200
+ http://localhost:4200S
 ```
 
 O el que indique la consola

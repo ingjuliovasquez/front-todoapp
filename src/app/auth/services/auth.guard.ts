@@ -4,18 +4,18 @@ import { isPlatformBrowser } from '@angular/common';
 import { TokenService } from './token.service';
 
 export const authGuard: CanActivateFn = () => {
-  const tokenService = inject(TokenService);
   const router = inject(Router);
+  const tokenService = inject(TokenService);
   const platformId = inject(PLATFORM_ID);
+
+  if (!isPlatformBrowser(platformId)) return true;
 
   if (tokenService.isAuthenticated()) return true;
 
-  if (isPlatformBrowser(platformId)) {
-    const raw = localStorage.getItem('auth_token');
-    if (raw) {
-      tokenService.setToken(raw);
-      return true;
-    }
+  const raw = localStorage.getItem('auth_token');
+  if (raw) {
+    tokenService.setToken(raw);
+    return true;
   }
 
   router.navigate(['/login']);
