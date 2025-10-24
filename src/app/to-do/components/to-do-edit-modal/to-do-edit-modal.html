@@ -1,0 +1,62 @@
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+<!-- Modal -->
+<div
+  class="fixed inset-0 flex items-center justify-center p-4"
+  role="dialog" aria-modal="true">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl p-6">
+    <h3 class="text-xl font-semibold mb-4">Editar tarea</h3>
+
+    @if (todoStore.selected(); as todo)  {
+      <div class="grid grid-cols-2 gap-3 mb-4 text-base">
+        <!-- <div>
+          <div class="text-gray-500">ID</div>
+          <div class="font-mono">{{ todo.id }}</div>
+        </div> -->
+        <div class="text-gray-500">Estado</div>
+        <div class="font-medium">
+          {{ todo.finished ? 'Completada' : 'Pendiente' }}
+        </div>
+
+      </div>
+
+      <div class="space-y-3">
+        <input
+          class="w-full rounded-lg bg-blue-50 shadow-2xs px-3 py-2 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
+          placeholder="Nombre"
+          [(ngModel)]="name"
+          [ngModelOptions]="{ standalone:true }"
+          aria-label="Nombre" />
+
+        <select
+          class="w-full rounded-lg bg-blue-300 text-white px-3 py-2 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
+          [(ngModel)]="priority"
+          [ngModelOptions]="{ standalone:true }"
+          aria-label="Prioridad">
+          <option [ngValue]="ETodoPriority.LOW">Baja</option>
+          <option [ngValue]="ETodoPriority.MED">Media</option>
+          <option [ngValue]="ETodoPriority.HI">Alta</option>
+        </select>
+      </div>
+
+      <div class="mt-6 flex gap-2 w-full justify-end">
+        <button
+          class="rounded-lg border w-full px-4 py-2 hover:bg-zinc-100"
+          (click)="close()">
+          Cancelar
+        </button>
+        <button
+          class="rounded-lg bg-blue-600 text-white w-full
+          px-4 py-2 font-medium  hover:bg-indigo-500 disabled:opacity-50"
+          [disabled]="todoStore.loading() || !name()"
+          (click)="editTodo()">
+          Guardar
+        </button>
+      </div>
+
+      <p class="text-red-500 text-sm mt-2" *ngIf="todoStore.error() as err">{{ err }}</p>
+    } @else {
+      <p>Cargando…</p>
+    }
+  </div>
+</div>

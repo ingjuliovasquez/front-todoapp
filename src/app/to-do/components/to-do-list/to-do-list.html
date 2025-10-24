@@ -1,0 +1,67 @@
+<section class="mt-4 rounded-2xl border border-blue-200  p-4">
+  @if (stats().total === 0 ) {
+    <p class="text-shadow-blue-950">No se encontraron tareas</p>
+  } @else {
+    <!-- Stats -->
+    <app-to-do-stats></app-to-do-stats>
+
+    <!-- List -->
+    <ul role="list" class="space-y-2 max-h-80 overflow-auto pr-1">
+      @for(todo of todos(); track todo.id || $index) {
+        <li class="flex items-center justify-between gap-3 rounded-xl bg-gray-200 p-3
+         hover:border-gray-300 hover:bg-gray-400/50 border-l-8"
+          [class.bg-gray-200]="!todo.finished"
+          [class.bg-gray-300/40]="todo.finished"
+          [class.opacity-70]="todo.finished"
+          [class.hover\:opacity-100]="todo.finished"
+          [class.hover\:bg-gray-300/60]="todo.finished"
+          [ngClass]="{
+              'border-gray-500': todo.priority === 'LOW',
+              'border-green-500': todo.priority === 'MED',
+              'border-red-500': todo.priority === 'HI'
+              }"
+        >
+          <label class="flex flex-1 items-center gap-3 peer">
+            <input type="checkbox" class="size-4 accent-indigo-500"
+            [checked]="todo.finished"
+            (click)="toggleTodo(todo.id)" />
+            <input
+            class="flex-1 rounded-md bg-transparent px-2 py-1 ring-1 ring-transparent focus:outline-none focus:ring-zinc-700"
+            [value]="todo.name"
+            [class.line-through]="todo.finished"
+            [class.text-zinc-400]="todo.finished"
+            (keyup)="renameTodo(todo.id, $event.target.value)"
+            [disabled]="todo.finished"
+            />
+            <span
+              class="px-2 py-1 text-xs font-semibold rounded-full text-white"
+              [class.opacity-60]="todo.finished"
+              [ngClass]="{
+              'bg-gray-500': todo.priority === 'LOW',
+              'bg-green-500': todo.priority === 'MED',
+              'bg-red-500': todo.priority === 'HI'
+              }"
+            >
+              {{ todo.priority === 'LOW' ? 'Baja' :
+                todo.priority === 'MED' ? 'Normal' :
+                todo.priority === 'HI' ? 'Alta' : '' }}
+            </span>
+          </label>
+          <button
+          class="rounded-md bg-gray-100 border border-zinc-700 p-2 peer-has-checked:hidden transition hover:border-indigo-400 hover:bg-indigo-400 hover:text-white"
+          (click)="editTodo(todo.id)" [disabled]="todo.finished"
+          [class.bg-indigo-400/30]="todo.finished">
+            <i-lucide [img]="SquarePenIcon" class="text-zinc-800" size="20"></i-lucide>
+          </button>
+          <button
+          class="rounded-md bg-gray-100 border border-zinc-700 p-2  transition hover:border-indigo-400 hover:bg-indigo-400 hover:text-white"
+          (click)="removeTodo(todo.id)">
+            <i-lucide [img]="X" class="text-zinc-800 " size="20"></i-lucide>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <app-to-do-edit-modal *ngIf="todoStore.modalOpen()"></app-to-do-edit-modal>
+</section>

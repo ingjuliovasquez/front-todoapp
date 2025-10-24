@@ -1,0 +1,25 @@
+  <section class="mt-4">
+    <div class="flex gap-2">
+      <input
+        class="flex-1 rounded-lg bg-blue-50 shadow-2xs px-3 py-2 ring-1 ring-blue-800 focus:outline-none focus:ring-indigo-500"
+        placeholder="Agrega una tarea nueva"
+        [(ngModel)]="newTitle"
+        (keyup.enter)="addTodo(newTitle, newPriority)"
+        aria-label="Nueva tarea" />
+
+      <select
+      class="rounded-lg bg-blue-50 px-3 py-2 ring-1 ring-blue-800 focus:outline-none focus:ring-indigo-500"
+      [(ngModel)]="newPriority"
+      aria-label="Prioridad">
+      <option [ngValue]="ETodoPriority.LOW">Baja</option>
+      <option [ngValue]="ETodoPriority.MED">Media</option>
+      <option [ngValue]="ETodoPriority.HI">Alta</option>
+    </select>
+      <button
+        class="rounded-lg bg-blue-600 px-4 py-2 font-medium hover:bg-indigo-500 disabled:opacity-50"
+        (click)="addTodo(newTitle, newPriority)"
+        >
+        <i-lucide [img]="Plus" class="text-white " size="30"></i-lucide>
+      </button>
+    </div>
+  </section>
