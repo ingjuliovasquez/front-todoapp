@@ -23,7 +23,7 @@ export class Login {
   password = '';
 
   loading = this.store.loading;
-  error   = this.store.error;
+  error = this.store.error;
 
   async onClickLogin() {
     if (!this.email?.length || !this.password?.length || this.loading()) return;
@@ -32,6 +32,7 @@ export class Login {
   }
 
   register() {
+    this.store.clearError();
     this.router.navigate(['/register']);
   }
 }

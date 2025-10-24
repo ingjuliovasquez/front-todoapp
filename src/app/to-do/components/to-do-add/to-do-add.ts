@@ -1,18 +1,21 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, } from '@angular/forms';
 import { ETodoPriority } from '../../model/to-do.model';
 import { ToDoStore } from '../../store/to-do.store';
 import { LucideAngularModule, Plus } from 'lucide-angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-to-do-add',
-  imports: [FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './to-do-add.html',
   styleUrl: './to-do-add.css',
 })
 export class ToDoAdd {
   readonly Plus = Plus;
   protected readonly todoStore = inject(ToDoStore);
+  error = this.todoStore.error;
+  loading = this.todoStore.loading;
 
   newTitle = '';
   newPriority: ETodoPriority = ETodoPriority.LOW;

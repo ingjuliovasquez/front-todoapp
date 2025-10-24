@@ -26,7 +26,7 @@ export class ToDoApi {
     return this.http.get<TodoResponseById>(url);
   }
 
-  list(limit: number = 10, page: number = 1) {
+  list(limit: number = 50, page: number = 1) {
     const url = `${environment.apiUrl}/v1/todo/list`;
     return this.http.get<TodoResponse>(url, {
       params: {

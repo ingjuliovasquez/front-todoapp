@@ -3,11 +3,14 @@ import { ETodoPriority, Filters, Todo } from "../model/to-do.model";
 import { effect, inject } from '@angular/core';
 import { ToDoApi } from '../data/to-do-api';
 import { firstValueFrom } from 'rxjs';
+import { isAbortOrHmrCancel, toErrorMessage } from '../utils/to-error-message';
+import { TokenService } from '../../auth/services/token.service';
 
 export interface TodoState {
   todos: Todo[];
   filters: Filters;
   loading: boolean;
+  loadingTodos: boolean;
   error: string | null;
   selected: Todo | null;
   modalOpen: boolean;
@@ -17,6 +20,7 @@ export const initialState: TodoState = {
   todos: [],
   filters: 'all',
   loading: false,
+  loadingTodos: true,
   error: null,
   selected: null,
   modalOpen: false,
@@ -47,12 +51,22 @@ export const ToDoStore = signalStore(
     const todoApi = inject(ToDoApi);
     return {
       fetchTodos: async () => {
-        patchState(store, {loading:true, error: null});
+        patchState(store, {loading: true, loadingTodos: true, error: null});
         try {
           const todos = await firstValueFrom(todoApi.list());
-          patchState(store, {todos: todos.data, loading:false});
+          const data = (todos?.data ?? []) as Todo[];
+          patchState(store, {todos: data, loading: false, loadingTodos: false, error: null });
         } catch (error) {
-          patchState(store, {error: error instanceof Error ? error.message: 'Error desconocido', loading: false});
+          if (isAbortOrHmrCancel(error)) {
+            patchState(store, { loading: false, loadingTodos: false, });
+            return;
+          }
+          patchState(store,
+            {
+              error: toErrorMessage(error),
+              loading: false,
+              loadingTodos: false,
+            });
         }
       },
 
@@ -67,7 +81,7 @@ export const ToDoStore = signalStore(
           });
         } catch (error) {
           patchState(store, {
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
             loading: false,
           });
         }
@@ -100,7 +114,7 @@ export const ToDoStore = signalStore(
             todos: prevTodos,
             selected: current,
             loading: false,
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
           });
         }
       },
@@ -108,6 +122,15 @@ export const ToDoStore = signalStore(
       addTodo: async (name: string, priority: ETodoPriority) => {
         const n = name.trim();
         if (n === '') return;
+
+        const exists = store.todos().some(
+          (todo) => todo.name.trim().toLowerCase() === n.toLowerCase()
+        );
+        if (exists) {
+          patchState(store, { error: 'Ya existe una tarea con ese nombre' });
+          return;
+        }
+
         const tempId = `temp-${crypto.randomUUID?.() ?? Date.now()}`;
         const todo: Todo = {
           id: tempId,
@@ -126,7 +149,7 @@ export const ToDoStore = signalStore(
         } catch (error) {
           patchState(store, {
             todos: store.todos().filter((todo) => todo.id !== tempId),
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
             loading: false,
           })
         }
@@ -147,7 +170,7 @@ export const ToDoStore = signalStore(
         } catch (error) {
            patchState(store, {
             todos: [...store.todos(), todo],
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
             loading: false,
           })
         }
@@ -163,7 +186,7 @@ export const ToDoStore = signalStore(
         } catch (error) {
           patchState(store, {
             todos: [...store.todos(), todo],
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
             loading: false,
           })
         }
@@ -188,7 +211,7 @@ export const ToDoStore = signalStore(
         } catch (error) {
           patchState(store, {
             todos: [...store.todos(), todo],
-            error: error instanceof Error ? error.message : 'Error desconocido',
+            error: toErrorMessage(error),
             loading: false,
           })
         }
@@ -202,7 +225,14 @@ export const ToDoStore = signalStore(
 
   withHooks((store) => ({
     onInit() {
+      const tokenSvc = inject(TokenService);
       effect(() => {
+        const token = tokenSvc.tokenSignal()();
+        if (!token) {
+          patchState(store, { loading: false, error: null });
+          return;
+        }
+
         const _ = store.filters();
         patchState(store, {error: null});
         store.fetchTodos();

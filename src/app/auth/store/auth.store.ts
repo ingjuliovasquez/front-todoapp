@@ -67,7 +67,7 @@ export const AuthStore = signalStore(
         patchState(store, { loading: true, error: null });
         try {
           await api.registerAndReturn(name, email, password);
-          patchState(store, { loading: false });
+          patchState(store, { loading: false, error: null, });
           await router.navigate(['/login']);
         } catch (err: any) {
           patchState(store, {

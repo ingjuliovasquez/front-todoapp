@@ -17,6 +17,7 @@ export class ToDoList {
   protected readonly todoStore = inject(ToDoStore);
   readonly todos = this.todoStore.filteredTodos;
   readonly stats = this.todoStore.stats;
+  readonly loading = this.todoStore.loadingTodos;
 
   renameTodo(id: string, name: string) {
     this.todoStore.renameTodo(id, name);

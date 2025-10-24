@@ -12,12 +12,5 @@ export const authGuard: CanActivateFn = () => {
 
   if (tokenService.isAuthenticated()) return true;
 
-  const raw = localStorage.getItem('auth_token');
-  if (raw) {
-    tokenService.setToken(raw);
-    return true;
-  }
-
-  router.navigate(['/login']);
-  return false;
+  return router.createUrlTree(['/login']);
 };

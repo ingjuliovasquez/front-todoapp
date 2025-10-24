@@ -8,11 +8,12 @@ const TOKEN_KEY = 'auth_token';
 export class TokenService {
   private storage = inject(SafeStorageService);
   private platformId = inject(PLATFORM_ID);
-
   private readonly _token = signal<string | null>(null);
 
   constructor() {
-    this._token.set(this.storage.getItem(TOKEN_KEY));
+    if (isPlatformBrowser(this.platformId)) {
+      this._token.set(this.storage.getItem(TOKEN_KEY));
+    }
   }
 
   get token() { return this._token(); }
@@ -31,5 +32,5 @@ export class TokenService {
   }
 
   clear() { this.setToken(null); }
-  isAuthenticated() { return !!this.token; }
+  isAuthenticated() { return !!this._token(); }
 }

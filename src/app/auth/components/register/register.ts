@@ -25,6 +25,7 @@ export class Register {
   loading = this.store.loading;
 
   login() {
+    this.store.clearError();
     this.router.navigate(['/login']);
   }
 
@@ -34,6 +35,7 @@ export class Register {
       this.store.setError('Las contraseñas no coinciden');
       return;
     }
+    this.store.clearError();
     await this.store.register(this.name, this.email, this.password);
   }
 }
