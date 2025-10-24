@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -6,6 +6,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './auth/services/auth.interceptor';
 import { AuthStore } from './auth/store/auth.store';
 import { ToDoStore } from './to-do/store/to-do.store';
+import { TokenService } from './auth/services/token.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     AuthStore,
     ToDoStore,
+    provideAppInitializer(() => {
+      const tokens = inject(TokenService);
+      tokens.rehydrateFromBrowser();
+    }),
   ]
 };

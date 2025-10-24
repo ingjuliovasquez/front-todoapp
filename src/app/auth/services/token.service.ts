@@ -1,19 +1,28 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { SafeStorageService } from '../helpers/safe-storage';
 
 const TOKEN_KEY = 'auth_token';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
-  private readonly storage: SafeStorageService;
+  private storage = inject(SafeStorageService);
+  private platformId = inject(PLATFORM_ID);
+
   private readonly _token = signal<string | null>(null);
 
-  constructor(storage: SafeStorageService) {
-    this.storage = storage;
+  constructor() {
     this._token.set(this.storage.getItem(TOKEN_KEY));
   }
 
   get token() { return this._token(); }
+  tokenSignal() { return this._token; }
+
+  rehydrateFromBrowser() {
+    if (isPlatformBrowser(this.platformId)) {
+      this._token.set(this.storage.getItem(TOKEN_KEY));
+    }
+  }
 
   setToken(token: string | null) {
     this._token.set(token);

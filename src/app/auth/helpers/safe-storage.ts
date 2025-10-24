@@ -16,20 +16,20 @@ class MemoryStorage implements IStorageLike {
 
 @Injectable({ providedIn: 'root' })
 export class SafeStorageService {
-  private storage: IStorageLike;
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly mem = new MemoryStorage();
 
-  constructor() {
-    const platformId = inject(PLATFORM_ID);
-    const isBrowser = isPlatformBrowser(platformId);
-
-    if (isBrowser && typeof window !== 'undefined' && window.localStorage) {
-      this.storage = window.localStorage;
-    } else {
-      this.storage = new MemoryStorage();
-    }
+  private get isBrowser() {
+    return isPlatformBrowser(this.platformId) &&
+           typeof window !== 'undefined' &&
+           !!window.localStorage;
   }
 
-  getItem(key: string) { return this.storage.getItem(key); }
-  setItem(key: string, value: string) { this.storage.setItem(key, value); }
-  removeItem(key: string) { this.storage.removeItem(key); }
+  private get store(): IStorageLike {
+    return this.isBrowser ? window.localStorage : this.mem;
+  }
+
+  getItem(key: string) { return this.store.getItem(key); }
+  setItem(key: string, value: string) { this.store.setItem(key, value); }
+  removeItem(key: string) { this.store.removeItem(key); }
 }

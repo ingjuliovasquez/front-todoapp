@@ -10,7 +10,6 @@
 | [TailwindCSS](https://tailwindcss.com/) | Framework utilitario de estilos. |
 | [Lucide Icons](https://lucide.dev/) | Librería de íconos SVG ligera y moderna. |
 | [NGRX Signals](https://ngrx.io/guide/signals) | Gestión reactiva del estado global. |
-| [dotenv](https://www.npmjs.com/package/dotenv) | Manejo de variables de entorno. |
 
 ---
 
@@ -21,23 +20,27 @@
 ```bash
 git clone https://github.com/
 cd front-todoapp
+```
 
 ### Instalar dependencias
 
 ```bash
 npm install
+```
 
 ### Configurar variables de entorno
-El proyecto utiliza un archivo .env para definir las variables necesarias.
+El proyecto utiliza una carpeta para environments para definir las variables necesarias.
 Primero, copia el archivo de ejemplo:
 
 ```bash
-.env.example 
+.environment-example.ts
+```
 
-Edita el archivo .env y coloca los valores reales:
+Agrega o edita el archivo environment.ts y environment.development.ts, ahí se coloca los valores reales:
 
 ```bash
 API_URL=http://localhost:3000
+```
 
 O el que apunta al backend
 
@@ -54,6 +57,7 @@ Una vez iniciado `npm start`, abre el navegador en:
 
 ```bash
  http://localhost:4200
+```
 
 O el que indique la consola
 
