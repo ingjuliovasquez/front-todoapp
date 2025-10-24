@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { AuthApi } from '../../../auth/data/auth-api';
 import { Router } from '@angular/router';
-import { List, LucideAngularModule } from 'lucide-angular';
+import { List, LogOut, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +12,7 @@ import { List, LucideAngularModule } from 'lucide-angular';
 export class Header {
   @Input() title = "ToDo List"
   readonly List = List;
+  readonly Exit = LogOut;
 
   private auth = inject(AuthApi);
   private router = inject(Router);
